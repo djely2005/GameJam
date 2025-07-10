@@ -33,7 +33,7 @@ func _update_state() -> void:
 	var target_state_id: String = name
 	if _get_input_movement_direction_xz() != Vector3.ZERO:
 		target_state_id = "Walking"
-	if Input.is_action_pressed("interact"):
+	if Input.is_action_just_pressed("interact"):
 		target_state_id= "Pushing"
 	
 	if target_state_id != name:

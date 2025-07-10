@@ -19,6 +19,7 @@ size = Vector3(0.831543, 1.74356, 0.120117)
 size = Vector3(0.843384, 1.75719, 0.915161)
 
 [node name="Box3d" type="CharacterBody3D"]
+collision_layer = 3
 script = ExtResource("1_jsrqi")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
