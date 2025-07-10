@@ -9,7 +9,6 @@ func _ready():
 	pass
 
 func set_mode(to_2d: bool):
-	is_2d_mode = to_2d
 	player2d.visible = to_2d
 	player3d.visible = not to_2d
 	player2d.set_process(to_2d)
@@ -17,6 +16,8 @@ func set_mode(to_2d: bool):
 	# Position sync
 	if to_2d:
 		# Project 3D position into 2D
+		var overlapping = get_element_overlaping_in_3D(player3d)
+		print(overlapping)
 		transform_3d_to_2d(player2d, player3d)
 	else:
 		# Get correct 3D Z position (e.g., standing on the right box)

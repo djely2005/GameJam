@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://lbqr55cbifhd"]
+[gd_scene load_steps=9 format=3 uid="uid://lbqr55cbifhd"]
 
+[ext_resource type="Script" uid="uid://dax68mfvd0li5" path="res://src/level_component/box/box_3d/box_3d.gd" id="1_jsrqi"]
 [ext_resource type="ArrayMesh" uid="uid://dlf4050cpifem" path="res://assets/level_component/3D/wooden chair.obj" id="1_lyy4w"]
 [ext_resource type="Texture2D" uid="uid://c621ofr4bm8fv" path="res://assets/level_component/3D/StylizedChair_DefaultMaterial_BaseColor.jpg" id="2_jsrqi"]
 
@@ -14,7 +15,11 @@ size = Vector3(0.78421, 0.7817, 0.919373)
 [sub_resource type="BoxShape3D" id="BoxShape3D_jsrqi"]
 size = Vector3(0.831543, 1.74356, 0.120117)
 
-[node name="Box3d" type="StaticBody3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_4sbe3"]
+size = Vector3(0.843384, 1.95773, 0.915161)
+
+[node name="Box3d" type="CharacterBody3D"]
+script = ExtResource("1_jsrqi")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.752535, 0)
@@ -35,3 +40,10 @@ shape = SubResource("BoxShape3D_lyy4w")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00366211, 0.139803, -0.439941)
 shape = SubResource("BoxShape3D_jsrqi")
+
+[node name="PushingArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.593295, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PushingArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0133667, -0.555161, -0.0424194)
+shape = SubResource("BoxShape3D_4sbe3")

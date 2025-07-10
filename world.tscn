@@ -75,7 +75,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2, -6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.507202, -1)
 
 [node name="Box3d2" parent="3D/SubViewport/World3D" instance=ExtResource("3_gbfbk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.507202, 1.2714)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.50043, 0.507202, 1.2714)
 
 [node name="PillarWall" parent="3D/SubViewport" instance=ExtResource("4_ioo17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2, -9)
