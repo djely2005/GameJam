@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://g2kowl8eyv1b"]
+
+[ext_resource type="Script" uid="uid://dn8e4uvfepx2d" path="res://world.gd" id="1_fj7yv"]
+[ext_resource type="PackedScene" uid="uid://cdevkpg0u6lui" path="res://src/actor/player/player.tscn" id="2_tlwt5"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_aqk2v"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_036b0"]
+size = Vector2(20, 20)
+
+[node name="World" type="Node"]
+script = ExtResource("1_fj7yv")
+
+[node name="World3D" type="Node3D" parent="."]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="World3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World3D/StaticBody3D"]
+shape = SubResource("WorldBoundaryShape3D_aqk2v")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World3D/StaticBody3D"]
+mesh = SubResource("PlaneMesh_036b0")
+
+[node name="World2D" type="Node2D" parent="."]
+
+[node name="Player" parent="." instance=ExtResource("2_tlwt5")]
+
+[node name="Player2D" parent="Player" index="0"]
+position = Vector2(97, 56)
+
+[node name="Player3D" parent="Player" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[editable path="Player"]

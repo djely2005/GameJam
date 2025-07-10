@@ -1,0 +1,37 @@
+[gd_scene load_steps=8 format=3 uid="uid://b8poc3s8rctg0"]
+
+[ext_resource type="Script" uid="uid://dcq6q4p8s4h5k" path="res://src/actor/player_2d/player_2d.gd" id="1_asn1h"]
+[ext_resource type="Texture2D" uid="uid://7q1s67f71nii" path="res://assets/actor/player2D/ExamplePlayerSprite.png" id="1_upp8m"]
+[ext_resource type="Script" uid="uid://ccs2cb6y88j01" path="res://src/actor/player_2d/state_machine/player_state_2d.gd" id="3_j5a8u"]
+[ext_resource type="Script" uid="uid://5ybur8e2i7dx" path="res://src/actor/player_2d/state_machine/states/player_state_2d_idle.gd" id="4_tuwu5"]
+[ext_resource type="Script" uid="uid://daves3qdnhvwa" path="res://src/actor/player_2d/state_machine/states/player_state_2d_walking.gd" id="5_hajou"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tjlyb"]
+radius = 13.0
+height = 50.0
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ihthq"]
+
+[node name="Player2D" type="CharacterBody2D"]
+script = ExtResource("1_asn1h")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_tjlyb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_upp8m")
+hframes = 21
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("3_j5a8u")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("4_tuwu5")
+
+[node name="Walking" type="Node" parent="StateMachine"]
+script = ExtResource("5_hajou")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_ihthq")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

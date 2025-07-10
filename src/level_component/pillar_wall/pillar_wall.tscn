@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dqyxi7s13gqf6"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_fulxt"]
+size = Vector2(10, 5)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_gvglh"]
+points = PackedVector3Array(5, 2.5, 0, 5, -2.5, 0, -5, 2.5, 0, -5, -2.5, 0)
+
+[node name="PillarWall" type="MeshInstance3D"]
+mesh = SubResource("QuadMesh_fulxt")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_gvglh")

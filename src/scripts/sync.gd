@@ -1,0 +1,117 @@
+class_name Sync
+extends Node
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+
+
+func transform_3d_to_2d(element2D, element3D):
+	if [element2D, element3D] not in Global.transforming_items: 
+		Global.transforming_items.append([element2D, element3D])
+	var hidden: MeshInstance3D = element3D.get_node('Hidden');
+	var object_size = hidden.mesh.get_aabb().size
+	var wall_dim = Global.pillar_wall.mesh.get_aabb().size
+	var wall_pos = Global.pillar_wall.global_position
+	var pos3D = element3D.global_position
+
+	# Convert global 3D to local wall space
+	var local_x = pos3D.x - (wall_pos.x - wall_dim.x / 2) - object_size.x / 2
+	var local_y = pos3D.y - (wall_pos.y - wall_dim.y / 2) - object_size.y / 2
+
+	# Normalize to [0, 1]
+	var normalized = Vector2(
+		clampf(local_x / wall_dim.x, 0, 1),
+		clampf(1.0 - (local_y / wall_dim.y), 0, 1)
+	)
+	var screen_size = get_visible_world_bounds_of_2d(element2D)
+	var result: Vector2 = Vector2.ZERO;
+	var rect = element2D.get_node("Hidden").mesh.get_aabb().size;
+	result.x = normalized.x * (screen_size.x - rect.x / 2);
+	result.y = normalized.y * (screen_size.y - rect.y / 2)
+	
+	element2D.global_position = result
+	return result
+
+
+func transform_2d_to_3d(element2D, element3D) -> Vector3:
+	var hidden: MeshInstance3D = element3D.get_node('Hidden');
+	var object_size = hidden.mesh.get_aabb().size
+	var wall_dim = Global.pillar_wall.mesh.get_aabb().size
+	var wall_pos = Global.pillar_wall.global_position
+	var pos2D = element2D.global_position
+	var screen_size = get_visible_world_bounds_of_2d(element2D)
+
+	var normalized = Vector2(
+		clampf(pos2D.x / screen_size.x, 0, 1),
+		clampf(1.0 - (pos2D.y / screen_size.y), 0, 1)
+	)
+	# Scale to wall space
+	var world_x = normalized.x * wall_dim.x + (wall_pos.x - wall_dim.x / 2) + object_size.x / 2
+	var world_y = normalized.y * wall_dim.y + (wall_pos.y - wall_dim.y / 2) + object_size.y / 2
+	var world_z = element3D.global_position.z
+
+	return Vector3(world_x, world_y, world_z)
+	 
+	
+func get_visible_world_bounds_of_2d(node: Node2D) -> Vector2:
+	var viewport := node.get_viewport()
+	var canvas_transform := viewport.get_canvas_transform()
+	return viewport.get_visible_rect().size / canvas_transform.get_scale()
+
+
+
+func get_element_overlaping_in_3D(element3D, result = []):
+	var space_state = element3D.get_world_3d().direct_space_state
+	var params = PhysicsRayQueryParameters3D.new()
+	var from = element3D.global_position;
+	var to = from + Vector3(0, 0, 10)
+	params.to = to
+	params.from = from
+	params.exclude = []
+	var intersection = space_state.intersect_ray(params)
+	if intersection == {}:
+		return result
+	else:
+		result.append(intersection)
+		get_element_overlaping_in_3D(intersection.collider, result)
+	return result;
+
+
+func get_element_in_the_same_2D_position(element2D, element3D) -> Array:
+	var array = [element2D, element3D]
+	var over_position = get_all_element_in_same_2D_x_position_in_3D();
+	for el in over_position:
+		if array in el:
+			el.erase(array)
+			return el
+	return []
+func get_all_element_in_same_2D_x_position_in_3D():
+	var dic = []
+	var skip = []
+	if Global.transforming_items == []:
+		return dic
+	var i = 0
+	var list = Global.transforming_items
+	for el in list:
+		if el in skip:
+			continue
+		dic.append([el])
+		skip.append(el)
+		for other in list:
+			if el[0].global_position.x == other[0].global_position.x && el not in skip:
+					dic[i].append(other)
+					skip.append(other)
+		i += 1
+	i = 0
+	var final = []
+	for el in dic:
+		if el.size() != 2:
+			final.append(el)
+		i += 1
+	return final

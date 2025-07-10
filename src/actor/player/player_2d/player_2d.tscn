@@ -1,0 +1,101 @@
+[gd_scene load_steps=13 format=3 uid="uid://b8poc3s8rctg0"]
+
+[ext_resource type="Script" uid="uid://dcq6q4p8s4h5k" path="res://src/actor/player/player_2d/player_2d.gd" id="1_asn1h"]
+[ext_resource type="Texture2D" uid="uid://be2yleaakaihc" path="res://assets/actor/player2D/Character2D.png" id="2_23feo"]
+[ext_resource type="Script" uid="uid://ci0466a2eb8vl" path="res://src/generic/state_machine/state_machine.gd" id="3_tuwu5"]
+[ext_resource type="Script" uid="uid://5ybur8e2i7dx" path="res://src/actor/player/player_2d/state_machine/states/player_state_2d_idle.gd" id="4_tuwu5"]
+[ext_resource type="Script" uid="uid://daves3qdnhvwa" path="res://src/actor/player/player_2d/state_machine/states/player_state_2d_walking.gd" id="5_hajou"]
+[ext_resource type="Script" uid="uid://ipl4pruapx1g" path="res://src/actor/player/player_2d/state_machine/states/player_state_2d_jumping.gd" id="6_23feo"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ihthq"]
+
+[sub_resource type="Animation" id="Animation_qwrwh"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+
+[sub_resource type="Animation" id="Animation_64dor"]
+resource_name = "jumping"
+
+[sub_resource type="Animation" id="Animation_23feo"]
+resource_name = "walking"
+length = 0.6
+loop_mode = 1
+step = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_64dor"]
+_data = {
+&"RESET": SubResource("Animation_qwrwh"),
+&"jumping": SubResource("Animation_64dor"),
+&"walking": SubResource("Animation_23feo")
+}
+
+[sub_resource type="QuadMesh" id="QuadMesh_23feo"]
+size = Vector2(81, 256)
+
+[node name="Player2D" type="CharacterBody2D"]
+script = ExtResource("1_asn1h")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.301346, 0.301346)
+texture = ExtResource("2_23feo")
+hframes = 5
+frame = 4
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("3_tuwu5")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("4_tuwu5")
+
+[node name="Walking" type="Node" parent="StateMachine"]
+script = ExtResource("5_hajou")
+
+[node name="Jumping" type="Node" parent="StateMachine"]
+script = ExtResource("6_23feo")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_ihthq")
+advance_expression_base_node = NodePath("../AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_64dor")
+}
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(-4.76837e-07, 0)
+scale = Vector2(6.66797, 6.66797)
+polygon = PackedVector2Array(3, 19, 1, 21, -3, 21, -5, 20, -5, 17, -6, 11, -5, 7, -6, 7, -5, -7, -4, -9, -6, -12, -5, -15, -2, -16, 0, -16, 3, -13, 2, -11, 1, -11, 2, -10, 0, -8, -1, -8, 0, -7, 1, -4, 3, 3, 4, 7, 2, 8, 1, 12, 1, 16, 0, 17, 1, 18)
+
+[node name="Hidden" type="MeshInstance2D" parent="."]
+visible = false
+position = Vector2(0, 29)
+scale = Vector2(1, 0.890625)
+mesh = SubResource("QuadMesh_23feo")
+
+[node name="FloorCollider" type="RayCast2D" parent="."]
+position = Vector2(0, 138)
+target_position = Vector2(0, 4)

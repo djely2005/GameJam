@@ -1,0 +1,128 @@
+[gd_scene load_steps=16 format=3 uid="uid://g2kowl8eyv1b"]
+
+[ext_resource type="Script" uid="uid://dn8e4uvfepx2d" path="res://world.gd" id="1_fj7yv"]
+[ext_resource type="PackedScene" uid="uid://cdevkpg0u6lui" path="res://src/actor/player/player.tscn" id="2_tlwt5"]
+[ext_resource type="Texture2D" uid="uid://jxdg2figos5e" path="res://icon.svg" id="3_036b0"]
+[ext_resource type="PackedScene" uid="uid://b8poc3s8rctg0" path="res://src/actor/player/player_2d/player_2d.tscn" id="3_aqk2v"]
+[ext_resource type="PackedScene" uid="uid://lbqr55cbifhd" path="res://src/level_component/box/box_3d/box_3d.tscn" id="3_gbfbk"]
+[ext_resource type="PackedScene" uid="uid://sdof2ed4bfss" path="res://src/actor/player/player_3d/player_3d.tscn" id="3_tlwt5"]
+[ext_resource type="PackedScene" uid="uid://dqyxi7s13gqf6" path="res://src/level_component/pillar_wall/pillar_wall.tscn" id="4_ioo17"]
+[ext_resource type="PackedScene" uid="uid://4if5yq364lvw" path="res://src/level_component/box/box_2d/box_2d.tscn" id="5_ioo17"]
+[ext_resource type="PackedScene" uid="uid://6f1ps5g30byu" path="res://src/level_component/box/box.tscn" id="8_wse8f"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_aqk2v"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_036b0"]
+size = Vector2(20, 20)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fj7yv"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_tlwt5"]
+sky_material = SubResource("ProceduralSkyMaterial_fj7yv")
+
+[sub_resource type="Environment" id="Environment_aqk2v"]
+background_mode = 2
+sky = SubResource("Sky_tlwt5")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ioo17"]
+size = Vector2(1168, 20)
+
+[node name="World" type="Node"]
+script = ExtResource("1_fj7yv")
+
+[node name="3D" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="3D"]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="World3D" type="Node3D" parent="3D/SubViewport"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="3D/SubViewport/World3D"]
+disable_mode = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="3D/SubViewport/World3D/StaticBody3D"]
+shape = SubResource("WorldBoundaryShape3D_aqk2v")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="3D/SubViewport/World3D/StaticBody3D"]
+mesh = SubResource("PlaneMesh_036b0")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="3D/SubViewport/World3D"]
+environment = SubResource("Environment_aqk2v")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="3D/SubViewport/World3D"]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="3D/SubViewport/World3D"]
+transform = Transform3D(1, 0, 2.38419e-07, 0, 1, 0, -2.38419e-07, 0, 1, 3, 2, 5)
+
+[node name="Player3D" parent="3D/SubViewport/World3D" instance=ExtResource("3_tlwt5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2, -6)
+
+[node name="Box3d" parent="3D/SubViewport/World3D" instance=ExtResource("3_gbfbk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.507202, -1)
+
+[node name="Box3d2" parent="3D/SubViewport/World3D" instance=ExtResource("3_gbfbk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.507202, 1.2714)
+
+[node name="PillarWall" parent="3D/SubViewport" instance=ExtResource("4_ioo17")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2, -9)
+
+[node name="2D" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="2D"]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="World2D" type="Node2D" parent="2D/SubViewport"]
+
+[node name="Sprite2D" type="Sprite2D" parent="2D/SubViewport/World2D"]
+position = Vector2(579, 540)
+scale = Vector2(9.92188, 9.92188)
+texture = ExtResource("3_036b0")
+
+[node name="Box2d" parent="2D/SubViewport/World2D" instance=ExtResource("5_ioo17")]
+position = Vector2(757, 323)
+
+[node name="Player2D" parent="2D/SubViewport/World2D" instance=ExtResource("3_aqk2v")]
+position = Vector2(556, 323)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="2D/SubViewport/World2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="2D/SubViewport/World2D/StaticBody2D"]
+position = Vector2(574, 659)
+shape = SubResource("RectangleShape2D_ioo17")
+
+[node name="Player" parent="." instance=ExtResource("2_tlwt5")]
+
+[node name="Box" parent="." instance=ExtResource("8_wse8f")]
+
+[connection signal="check_if_switch_is_possible" from="." to="Player" method="_on_world_check_if_switch_is_possible"]
+[connection signal="switch" from="." to="3D/SubViewport/World3D/Player3D" method="_on_world_switch"]
+[connection signal="switch" from="." to="Player" method="_on_world_switch"]
+[connection signal="switch" from="." to="Box" method="_on_world_switch"]
+[connection signal="abort_transformation" from="Player" to="." method="_on_player_abort_transformation"]
+
+[editable path="Player"]
+[editable path="Box"]

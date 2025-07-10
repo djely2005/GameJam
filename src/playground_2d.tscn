@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://c04d5ked0em1c"]
+
+[ext_resource type="PackedScene" uid="uid://b8poc3s8rctg0" path="res://src/actor/player/player_2d/player_2d.tscn" id="1_h1fny"]
+
+[node name="Playground2D" type="Node2D"]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+offset_right = 1148.0
+offset_bottom = 648.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+render_target_update_mode = 4
+
+[node name="Player2D" parent="SubViewportContainer" instance=ExtResource("1_h1fny")]
+position = Vector2(441, 247)
