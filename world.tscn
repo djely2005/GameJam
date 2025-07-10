@@ -105,6 +105,9 @@ texture = ExtResource("3_036b0")
 [node name="Box2d" parent="2D/SubViewport/World2D" instance=ExtResource("5_ioo17")]
 position = Vector2(757, 323)
 
+[node name="Box2d2" parent="2D/SubViewport/World2D" instance=ExtResource("5_ioo17")]
+position = Vector2(757, 323)
+
 [node name="Player2D" parent="2D/SubViewport/World2D" instance=ExtResource("3_aqk2v")]
 position = Vector2(556, 323)
 
@@ -117,6 +120,12 @@ shape = SubResource("RectangleShape2D_ioo17")
 [node name="Player" parent="." instance=ExtResource("2_tlwt5")]
 
 [node name="Box" parent="." instance=ExtResource("8_wse8f")]
+element_3d_path = NodePath("../3D/SubViewport/World3D/Box3d")
+element_2d_path = NodePath("../2D/SubViewport/World2D/Box2d")
+
+[node name="Box2" parent="." instance=ExtResource("8_wse8f")]
+element_3d_path = NodePath("../3D/SubViewport/World3D/Box3d2")
+element_2d_path = NodePath("../2D/SubViewport/World2D/Box2d2")
 
 [connection signal="check_if_switch_is_possible" from="." to="Player" method="_on_world_check_if_switch_is_possible"]
 [connection signal="switch" from="." to="3D/SubViewport/World3D/Player3D" method="_on_world_switch"]
@@ -126,3 +135,4 @@ shape = SubResource("RectangleShape2D_ioo17")
 
 [editable path="Player"]
 [editable path="Box"]
+[editable path="Box2"]

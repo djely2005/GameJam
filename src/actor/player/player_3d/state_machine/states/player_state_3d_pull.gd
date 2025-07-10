@@ -4,19 +4,18 @@ extends PlayerState3D
 func physics_update(delta: float) -> void:
 	var movement_direction_xz: Vector3 = _get_input_movement_direction_xz()
 	_apply_xz_movement(delta, movement_direction_xz)
-	#if movement_direction_xz != Vector3.ZERO:
-		#_rotate_body(delta, movement_direction_xz)
+	if movement_direction_xz != Vector3.ZERO:
+		_rotate_body(delta, movement_direction_xz)
 	var space_state = _player.get_world_3d().direct_space_state
 	var params = PhysicsRayQueryParameters3D.new()
 	var raw_direction = movement_direction_xz.normalized()
-	print("x: ", _player.global_transform.basis.z.x, "z: ", _player.global_basis.z.z)
 	var facing_direction = Vector3(
-		-_player.global_transform.basis.z.x,
+		sign(raw_direction.x),
 		0,
-		-_player.global_transform.basis.z.z
+		sign(raw_direction.z)
 	)
 	params.from = _player.global_position
-	params.to = _player.global_position - sign(facing_direction) / 2.1
+	params.to = _player.global_position + facing_direction / 2.1
 	params.collide_with_areas = true
 	params.exclude = []
 	var result = space_state.intersect_ray(params)
@@ -25,7 +24,7 @@ func physics_update(delta: float) -> void:
 			if result.collider.get_parent() is CharacterBody3D:
 				var chair = result.collider.get_parent()
 				chair.push_speed = move_speed_xz
-				chair.push_direction = -facing_direction
+				chair.push_direction = - facing_direction
 				chair.is_being_pushed = true
 	_update_state()
 	_player.move_and_slide()
@@ -42,9 +41,8 @@ func _animate() -> void:
 
 func _update_state() -> void:
 	var target_state_id: String = name
-	if _get_input_movement_direction_xz() == Vector3.ZERO && Input.is_action_pressed("interact"):
+	if _get_input_movement_direction_xz() == Vector3.ZERO:
 		target_state_id = "Idle"
-	if _get_input_movement_direction_xz() != Vector3.ZERO && Input.is_action_pressed("interact"):
-		target_state_id = "Walking"
+
 	if target_state_id != name:
 		emit_signal("change_state_request", target_state_id, {})

@@ -34,7 +34,6 @@ func set_mode(to_2d: bool):
 			for element in overlapping:
 				if teleport_destination.global_position.z > element.collider.global_position.z:
 					teleport_destination = overlapping
-		print(teleport_destination)
 		var new_pos = transform_2d_to_3d(player2d, player3d)
 		var depth = player3d.global_position.z
 		if (overlapping):

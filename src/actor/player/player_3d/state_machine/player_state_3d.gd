@@ -8,6 +8,7 @@ extends State
 @export var friction_xz: float = 20
 @export var acceleration_body_rotation: float = 1.0
 @export var jump_velocity: float = 5.0
+@export var rotation_speed: float = 0.005
 
 ### Private variables ###
 @onready var _player: Player3D
@@ -29,6 +30,10 @@ func _ready() -> void:
 # Corresponds to _unhandled_input() callback
 # warning-ignore:unused_argument
 func handle_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.is_pressed():
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if Input.is_action_just_pressed("ui_cancel"):  # Escape key by default
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	pass
 
 
@@ -65,7 +70,10 @@ func _get_input_movement_direction_xz() -> Vector3:
 	return direction
 
 func _apply_xz_movement(delta: float, direction_xz: Vector3) -> void:
+	var forward = -_player.global_transform.basis.z
+	var right = _player.global_transform.basis.x
 	if direction_xz != Vector3.ZERO:
+		direction_xz = (abs(right) * direction_xz.x + forward * direction_xz.z).normalized()
 		var velocity_target_xz: Vector3 = direction_xz * move_speed_xz
 		_player.velocity.x = _player.velocity.move_toward(velocity_target_xz, acceleration_xz * delta).x
 		_player.velocity.z = _player.velocity.move_toward(velocity_target_xz, acceleration_xz * delta).z

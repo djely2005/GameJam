@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://sdof2ed4bfss"]
+[gd_scene load_steps=20 format=3 uid="uid://sdof2ed4bfss"]
 
 [ext_resource type="Script" uid="uid://dpae7md3v5kyn" path="res://src/actor/player/player_3d/player_3d.gd" id="1_ftpr1"]
 [ext_resource type="Script" uid="uid://ci0466a2eb8vl" path="res://src/generic/state_machine/state_machine.gd" id="2_bc88m"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://byh8rl8u25ims" path="res://src/actor/player/player_3d/state_machine/states/player_state_3d_pushing.gd" id="5_cmy2o"]
 [ext_resource type="Script" uid="uid://twydo6dn6u6r" path="res://src/actor/player/player_3d/camera_rig.gd" id="5_jog26"]
 [ext_resource type="Script" uid="uid://cjl1f4kxwi8yx" path="res://src/actor/player/player_3d/player_camera_3d.gd" id="6_3k60s"]
+[ext_resource type="Script" uid="uid://y6ficvobsymn" path="res://src/actor/player/player_3d/state_machine/states/player_state_3d_pull.gd" id="6_y0qpd"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0shv6"]
 radius = 0.3
@@ -45,6 +46,9 @@ transitions = ["Idle", "Walking", SubResource("AnimationNodeStateMachineTransiti
 [sub_resource type="BoxMesh" id="BoxMesh_3k60s"]
 size = Vector3(0.5, 1.7, 0.5)
 
+[sub_resource type="BoxMesh" id="BoxMesh_y0qpd"]
+size = Vector3(0.1, 0.1, 0.1)
+
 [node name="Player3D" type="CharacterBody3D"]
 script = ExtResource("1_ftpr1")
 
@@ -66,6 +70,9 @@ script = ExtResource("4_n3a1t")
 [node name="Pushing" type="Node" parent="StateMachine"]
 script = ExtResource("5_cmy2o")
 
+[node name="Pulling" type="Node" parent="StateMachine"]
+script = ExtResource("6_y0qpd")
+
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeStateMachine_bc88m")
 advance_expression_base_node = NodePath("../AnimationPlayer")
@@ -84,3 +91,10 @@ script = ExtResource("6_3k60s")
 [node name="Hidden" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("BoxMesh_3k60s")
+
+[node name="FaceDirection" type="RayCast3D" parent="."]
+target_position = Vector3(0.4, 0, 0)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.511917, 0.298916)
+mesh = SubResource("BoxMesh_y0qpd")

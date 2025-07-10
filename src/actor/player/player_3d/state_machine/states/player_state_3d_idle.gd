@@ -16,6 +16,11 @@ func physics_update(delta: float) -> void:
 func enter(_data: Dictionary={}) -> void:
 	_animate()
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion && Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		var mouse_motion_event: InputEventMouseMotion = event as InputEventMouseMotion
+		_player.rotation.y -= mouse_motion_event.relative.x * rotation_speed
+	pass
 
 ############################
 #      Private Methods     #

@@ -1,11 +1,16 @@
 extends Sync
 
-@onready var player3d = $"../3D/SubViewport/World3D/Box3d"
-@onready var player2d = $"../2D/SubViewport/World2D/Box2d"
+@export var element_3d_path: NodePath;
+@export var element_2d_path: NodePath;
+
+var player2d;
+var player3d;
 
 var is_2d_mode = false
 
 func _ready():
+	player2d = get_node(element_2d_path)
+	player3d = get_node(element_3d_path)
 	pass
 
 func set_mode(to_2d: bool):
@@ -17,7 +22,6 @@ func set_mode(to_2d: bool):
 	if to_2d:
 		# Project 3D position into 2D
 		var overlapping = get_element_overlaping_in_3D(player3d)
-		print(overlapping)
 		transform_3d_to_2d(player2d, player3d)
 	else:
 		# Get correct 3D Z position (e.g., standing on the right box)
