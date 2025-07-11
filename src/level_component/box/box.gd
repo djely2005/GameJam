@@ -11,6 +11,7 @@ var is_2d_mode = false
 func _ready():
 	player2d = get_node(element_2d_path)
 	player3d = get_node(element_3d_path)
+	get_parent().switch.connect(_on_world_switch)
 	pass
 
 func set_mode(to_2d: bool):

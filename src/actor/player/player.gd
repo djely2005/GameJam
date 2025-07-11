@@ -28,6 +28,8 @@ func set_mode(to_2d: bool):
 		var overlapping;
 		if body:
 			overlapping = get_element_overlaping_in_3D(body[1])
+			if !overlapping:
+				overlapping.append({"collider": body[1]})
 		var teleport_destination;
 		if overlapping:
 			teleport_destination = overlapping[0].collider

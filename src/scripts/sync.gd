@@ -4,16 +4,42 @@ extends Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
 
+func sort_element_overlapping(overlapping):
+	var n = overlapping.size()
+	for i in range(n):
+		for j in range(0, n - i - 1):
+			if overlapping[j].collider.global_position.z > overlapping[j + 1].collider.global_position.z:
+				var temp = overlapping[j]
+				overlapping[j] = overlapping[j + 1]
+				overlapping[j + 1] = temp
+	return overlapping
+	var teleport_destination = overlapping[0].collider
+	for element in overlapping:
+		if teleport_destination.global_position.z > element.collider.global_position.z:
+			teleport_destination = overlapping
 
+func get_2d_and_3d_element(element):
+	var body = null
+	for item in Global.transforming_items:
+		if element in item:
+			body = item
+	return body
 func transform_3d_to_2d(element2D, element3D):
-	if [element2D, element3D] not in Global.transforming_items: 
-		Global.transforming_items.append([element2D, element3D])
+	var overlapping = get_element_overlaping_in_3D(element3D)
+	overlapping.append({"collider": element3D})
+	overlapping = sort_element_overlapping(overlapping)
+	for i in overlapping.size():
+		var equivalent = get_2d_and_3d_element(overlapping[i].collider)
+		if equivalent != null:
+			if equivalent[0].get_node("Sprite2D").z_index <= i:
+				equivalent[0].get_node("Sprite2D").z_index = i
 	var hidden: MeshInstance3D = element3D.get_node('Hidden');
 	var object_size = hidden.mesh.get_aabb().size
 	var wall_dim = Global.pillar_wall.mesh.get_aabb().size
@@ -70,6 +96,8 @@ func get_element_overlaping_in_3D(element3D, result = []):
 	var space_state = element3D.get_world_3d().direct_space_state
 	var params = PhysicsRayQueryParameters3D.new()
 	var from = element3D.global_position;
+	var hidden = element3D.get_node("Hidden");
+	#var size = hidden.mesh.get_aabb()
 	var to = from + Vector3(0, 0, 10)
 	params.to = to
 	params.from = from
@@ -115,3 +143,10 @@ func get_all_element_in_same_2D_x_position_in_3D():
 			final.append(el)
 		i += 1
 	return final
+
+func _on_world_switch(is_2d: bool) -> void:
+	set_mode(is_2d)
+	pass # Replace with function body.
+
+func set_mode(is_2d):
+	pass

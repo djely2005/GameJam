@@ -17,6 +17,11 @@ var player_camera;
 
 func _ready():
 	# Set initial visibility states
+	for c in get_children():
+		if c is Sync:
+			c.connect("switch", c._on_world_switch)
+			if [c.player2d, c.player3d] not in Global.transforming_items: 
+				Global.transforming_items.append([c.player2d, c.player3d])
 	world_2d.visible = is_2d
 	world_3d.visible = !is_2d
 	Global.pillar_wall = pillar_wall

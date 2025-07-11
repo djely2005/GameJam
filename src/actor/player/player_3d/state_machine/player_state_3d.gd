@@ -30,10 +30,6 @@ func _ready() -> void:
 # Corresponds to _unhandled_input() callback
 # warning-ignore:unused_argument
 func handle_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.is_pressed():
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	if Input.is_action_just_pressed("ui_cancel"):  # Escape key by default
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	pass
 
 

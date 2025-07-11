@@ -1,19 +1,14 @@
 extends PlayerState3D
 
-var result = {};
 var target: Node3D = null;
-var cardinal_facing = 0;
-var facing_direction;
 var is_attached := false
 # Public Method
  
 func physics_update(delta: float) -> void:
 	if not is_attached:
-		if target == null:
-			target = _get_nearest_physics_object()
-		elif target:
-			_move_towards_target(delta)
-			_face_target_cardinal()
+		target = _get_nearest_physics_object()
+		_move_towards_target(delta)
+		_face_target_cardinal()
 	else:
 		_move_player_and_push(delta)
 	_update_state()
@@ -24,6 +19,8 @@ func enter(_data: Dictionary={}) -> void:
 	_animate()
 
 # Private Method
+func handle_input(event: InputEvent) -> void:
+	pass
 
 func _animate() -> void:
 	_animation_state_machine.travel("interact")
@@ -32,10 +29,11 @@ func _update_state() -> void:
 	var target_state_id: String = name
 	if _get_input_movement_direction_xz() == Vector3.ZERO && (target == null || Input.is_action_just_pressed("interact")):
 		target_state_id = "Idle"
-		print('test')
 	if _get_input_movement_direction_xz() != Vector3.ZERO && (target == null || Input.is_action_just_pressed("interact")):
 		target_state_id = "Walking"
 	if target_state_id != name:
+		is_attached = false
+		
 		emit_signal("change_state_request", target_state_id, {})
 
 
@@ -50,7 +48,6 @@ func _get_nearest_physics_object() -> Node3D:
 				min_distance = distance
 				nearest = body
 				
-	print(nearest)
 	return nearest
 
 func _move_towards_target(delta):
@@ -89,15 +86,13 @@ func _face_target_cardinal():
 func _move_player_and_push(delta):
 	var input_dir = Vector3.ZERO
 	input_dir = _get_input_movement_direction_xz()
-
 	if input_dir != Vector3.ZERO:
-		print('check')
 		input_dir = input_dir.normalized()
 
 		# Rotate input based on player's facing direction
 		var basis = Basis(Vector3.UP, _player.rotation.y)  # Y-axis rotation
-		var move_dir = _player.basis * input_dir      # Convert local to global direction
-
+		var move_dir = input_dir      # Convert local to global direction
+		
 		# Apply velocity
 		_player.velocity = move_dir * move_speed_xz / PI
 		_player.move_and_slide()
