@@ -18,6 +18,9 @@ func physics_update(delta: float) -> void:
 func enter(_data: Dictionary={}) -> void:
 	_animate()
 
+func exit() -> void:
+	if target != null:
+		target.set_physics_process(true)
 # Private Method
 func handle_input(event: InputEvent) -> void:
 	pass
@@ -99,6 +102,7 @@ func _move_player_and_push(delta):
 
 		# Move target object if attached
 		if target:
+			target.set_physics_process(false)
 			target.velocity = move_dir * move_speed_xz / PI
 			target.move_and_slide()
 	else:

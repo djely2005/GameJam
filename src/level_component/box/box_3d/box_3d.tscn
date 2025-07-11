@@ -8,6 +8,7 @@
 albedo_texture = ExtResource("2_jsrqi")
 
 [sub_resource type="BoxMesh" id="BoxMesh_grbeg"]
+size = Vector3(0.843, 1.757, 0.915)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lyy4w"]
 size = Vector3(0.78421, 0.7817, 0.919373)
@@ -28,6 +29,7 @@ mesh = ExtResource("1_lyy4w")
 surface_material_override/0 = SubResource("StandardMaterial3D_4sbe3")
 
 [node name="Hidden" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.115243, 0)
 visible = false
 mesh = SubResource("BoxMesh_grbeg")
 skeleton = NodePath("../MeshInstance3D")

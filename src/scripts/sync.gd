@@ -25,12 +25,15 @@ func sort_element_overlapping(overlapping):
 		if teleport_destination.global_position.z > element.collider.global_position.z:
 			teleport_destination = overlapping
 
+
 func get_2d_and_3d_element(element):
 	var body = null
 	for item in Global.transforming_items:
 		if element in item:
 			body = item
 	return body
+
+
 func transform_3d_to_2d(element2D, element3D):
 	var overlapping = get_element_overlaping_in_3D(element3D)
 	overlapping.append({"collider": element3D})
@@ -40,6 +43,7 @@ func transform_3d_to_2d(element2D, element3D):
 		if equivalent != null:
 			if equivalent[0].get_node("Sprite2D").z_index <= i:
 				equivalent[0].get_node("Sprite2D").z_index = i
+
 	var hidden_3d: MeshInstance3D = element3D.get_node('Hidden');
 	var object_size_3d = hidden_3d.mesh.get_aabb().size * element3D.scale * element3D.get_node("Hidden").scale
 	var wall_dim = Global.pillar_wall.mesh.get_aabb().size
@@ -62,7 +66,6 @@ func transform_3d_to_2d(element2D, element3D):
 	var rect = element2D.get_node("Hidden").mesh.get_aabb().size;
 	rect.x = rect.x * element2D.scale.x * element2D.get_node("Hidden").scale.x
 	rect.y = rect.y * element2D.scale.y * element2D.get_node("Hidden").scale.y
-	print(rect)
 	result.x = normalized.x * (world_size_2d.x) - rect.x / 2;
 	result.y = normalized.y * (world_size_2d.y) - rect.y / 2;
 	
