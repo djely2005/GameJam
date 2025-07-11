@@ -90,25 +90,43 @@ func get_visible_world_bounds_of_2d(node: Node2D) -> Vector2:
 	var canvas_transform := viewport.get_canvas_transform()
 	return viewport.get_visible_rect().size / canvas_transform.get_scale()
 
+func get_unique_array(input_array: Array) -> Array:
+	var unique_elements := {} # Use a dictionary to store unique elements as keys
+	for item in input_array:
+		unique_elements[item] = true # The value doesn't matter, only the unique key
+	return unique_elements.keys() # Return an array of the dictionary's keys
 
-
-func get_element_overlaping_in_3D(element3D, result = []):
+func get_element_overlaping_in_3D(element3D, result = [], second = {}):
+	if !second.is_empty():
+		var branch = get_element_overlaping_in_3D(second)
+		result.append_array(branch)
 	var space_state = element3D.get_world_3d().direct_space_state
 	var params = PhysicsRayQueryParameters3D.new()
-	var from = element3D.global_position;
 	var hidden = element3D.get_node("Hidden");
-	#var size = hidden.mesh.get_aabb()
-	var to = from + Vector3(0, 0, 10)
-	params.to = to
+	var size = hidden.mesh.get_aabb().size
+	var from = element3D.global_position + Vector3(size.x/2, 0, 0);
+	var to = from + Vector3(0, 0, 10) + Vector3(size.x/2, 0, 0)
 	params.from = from
+	params.to = to
 	params.exclude = []
-	var intersection = space_state.intersect_ray(params)
-	if intersection == {}:
+	var intersection1 = space_state.intersect_ray(params)
+	params.from.x -= size.x
+	params.to.x -= size.x
+	var intersection2 = space_state.intersect_ray(params)
+	if intersection1.is_empty() && intersection2.is_empty():
 		return result
 	else:
-		result.append(intersection)
-		get_element_overlaping_in_3D(intersection.collider, result)
-	return result;
+		if !intersection1.is_empty():
+			result.append(intersection1)
+			get_element_overlaping_in_3D(intersection1.collider, result)
+		elif !intersection2.is_empty():
+			result.append(intersection2)
+			get_element_overlaping_in_3D(intersection2.collider, result)
+		else: 
+			result.append(intersection2)
+			result.append(intersection2)
+			get_element_overlaping_in_3D(intersection2.collider, result, intersection1.collider)
+	return get_unique_array(result);
 
 
 func get_element_in_the_same_2D_position(element2D, element3D) -> Array:

@@ -72,13 +72,13 @@ transform = Transform3D(1, 0, 2.38419e-07, 0, 1, 0, -2.38419e-07, 0, 1, 3, 2, 5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.72154, 2, -6)
 
 [node name="Box3d" parent="3D/SubViewport/World3D" instance=ExtResource("3_gbfbk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.41554, 0.507202, -1.22397)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4262, 0.507202, -5.30133)
 
 [node name="Box3d2" parent="3D/SubViewport/World3D" instance=ExtResource("3_gbfbk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.71293, 0.507202, 0.0749896)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.79183, 0.507202, -2.01631)
 
 [node name="Box3d3" parent="3D/SubViewport/World3D" instance=ExtResource("3_gbfbk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.78639, 0.507202, 2.65284)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.43284, 0.507202, 1.42926)
 
 [node name="PillarWall" parent="3D/SubViewport" instance=ExtResource("4_ioo17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2, -9)
