@@ -4,7 +4,7 @@ extends Node
 @onready var world_3d: SubViewportContainer = $"3D"
 @onready var player_3d: Player3D = $"3D/SubViewport/World3D/Player3D"
 @onready var pillar_wall: MeshInstance3D = $"3D/SubViewport/PillarWall"
-
+@onready var bound_2d: MeshInstance2D = $"2D/SubViewport/World2D/Bound2D"
 
 
 signal switch(is_2d : bool)
@@ -25,6 +25,7 @@ func _ready():
 	world_2d.visible = is_2d
 	world_3d.visible = !is_2d
 	Global.pillar_wall = pillar_wall
+	Global.bound_2d = bound_2d
 
 func _input(event):
 	if event.is_action_pressed("switch"):

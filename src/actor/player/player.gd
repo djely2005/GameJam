@@ -12,7 +12,6 @@ func _ready():
 	pass
 
 func set_mode(to_2d: bool):
-	var attached_camera = player3d.get_viewport().get_camera_3d()
 	if to_2d:
 		disable_input(player3d)
 		transform_3d_to_2d(player2d, player3d)

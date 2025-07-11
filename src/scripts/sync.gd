@@ -40,46 +40,59 @@ func transform_3d_to_2d(element2D, element3D):
 		if equivalent != null:
 			if equivalent[0].get_node("Sprite2D").z_index <= i:
 				equivalent[0].get_node("Sprite2D").z_index = i
-	var hidden: MeshInstance3D = element3D.get_node('Hidden');
-	var object_size = hidden.mesh.get_aabb().size
+	var hidden_3d: MeshInstance3D = element3D.get_node('Hidden');
+	var object_size_3d = hidden_3d.mesh.get_aabb().size * element3D.scale * element3D.get_node("Hidden").scale
 	var wall_dim = Global.pillar_wall.mesh.get_aabb().size
 	var wall_pos = Global.pillar_wall.global_position
 	var pos3D = element3D.global_position
 
 	# Convert global 3D to local wall space
-	var local_x = pos3D.x - (wall_pos.x - wall_dim.x / 2) - object_size.x / 2
-	var local_y = pos3D.y - (wall_pos.y - wall_dim.y / 2) - object_size.y / 2
+	var local_x = pos3D.x - (wall_pos.x - wall_dim.x / 2) - object_size_3d.x / 2
+	var local_y = pos3D.y - (wall_pos.y - wall_dim.y / 2) - object_size_3d.y / 2
 
 	# Normalize to [0, 1]
 	var normalized = Vector2(
 		clampf(local_x / wall_dim.x, 0, 1),
 		clampf(1.0 - (local_y / wall_dim.y), 0, 1)
 	)
-	var screen_size = get_visible_world_bounds_of_2d(element2D)
+	var world_size_2d = Global.bound_2d.mesh.get_aabb().size;
+	world_size_2d.x *= Global.bound_2d.scale.x
+	world_size_2d.y *= Global.bound_2d.scale.y
 	var result: Vector2 = Vector2.ZERO;
 	var rect = element2D.get_node("Hidden").mesh.get_aabb().size;
-	result.x = normalized.x * (screen_size.x - rect.x / 2);
-	result.y = normalized.y * (screen_size.y - rect.y / 2)
+	rect.x = rect.x * element2D.scale.x * element2D.get_node("Hidden").scale.x
+	rect.y = rect.y * element2D.scale.y * element2D.get_node("Hidden").scale.y
+	print(rect)
+	result.x = normalized.x * (world_size_2d.x) - rect.x / 2;
+	result.y = normalized.y * (world_size_2d.y) - rect.y / 2;
 	
 	element2D.global_position = result
 	return result
 
 
 func transform_2d_to_3d(element2D, element3D) -> Vector3:
-	var hidden: MeshInstance3D = element3D.get_node('Hidden');
+	var hidden: MeshInstance2D = element2D.get_node('Hidden');
 	var object_size = hidden.mesh.get_aabb().size
+	object_size.x *= element2D.scale.x * element2D.get_node("Hidden").scale.x
+	object_size.y *= element2D.scale.y * element2D.get_node("Hidden").scale.y
 	var wall_dim = Global.pillar_wall.mesh.get_aabb().size
 	var wall_pos = Global.pillar_wall.global_position
 	var pos2D = element2D.global_position
-	var screen_size = get_visible_world_bounds_of_2d(element2D)
-
+	var world_size_2d = Global.bound_2d.mesh.get_aabb().size;
+	var world_pos_2d = Global.bound_2d.global_position
+	world_size_2d.x *= Global.bound_2d.scale.x
+	world_size_2d.y *= Global.bound_2d.scale.y
+	var local_x = pos2D.x + (world_pos_2d.x - world_size_2d.x / 2) + object_size.x / 2
+	var local_y = pos2D.y + (world_pos_2d.y - world_size_2d.y / 2) + object_size.y / 2
+	
 	var normalized = Vector2(
-		clampf(pos2D.x / screen_size.x, 0, 1),
-		clampf(1.0 - (pos2D.y / screen_size.y), 0, 1)
+		clampf(local_x / world_size_2d.x, 0, 1),
+		clampf(1.0 - (local_y / world_size_2d.y), 0, 1)
 	)
 	# Scale to wall space
-	var world_x = normalized.x * wall_dim.x + (wall_pos.x - wall_dim.x / 2) + object_size.x / 2
-	var world_y = normalized.y * wall_dim.y + (wall_pos.y - wall_dim.y / 2) + object_size.y / 2
+	var rect = element3D.get_node("Hidden").mesh.get_aabb().size * element3D.scale * element3D.get_node("Hidden").scale;
+	var world_x = normalized.x * wall_dim.x + (wall_pos.x - wall_dim.x / 2) + rect.x / 2
+	var world_y = normalized.y * wall_dim.y + (wall_pos.y - wall_dim.y / 2) + rect.y / 2
 	var world_z = element3D.global_position.z
 
 	return Vector3(world_x, world_y, world_z)

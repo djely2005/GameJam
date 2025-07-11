@@ -7,6 +7,9 @@
 [ext_resource type="Script" uid="uid://daves3qdnhvwa" path="res://src/actor/player/player_2d/state_machine/states/player_state_2d_walking.gd" id="5_hajou"]
 [ext_resource type="Script" uid="uid://ipl4pruapx1g" path="res://src/actor/player/player_2d/state_machine/states/player_state_2d_jumping.gd" id="6_23feo"]
 
+[sub_resource type="QuadMesh" id="QuadMesh_23feo"]
+size = Vector2(10, 10)
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ihthq"]
 
 [sub_resource type="Animation" id="Animation_qwrwh"]
@@ -52,14 +55,16 @@ _data = {
 &"walking": SubResource("Animation_23feo")
 }
 
-[sub_resource type="QuadMesh" id="QuadMesh_23feo"]
-size = Vector2(81, 256)
-
 [node name="Player2D" type="CharacterBody2D"]
 script = ExtResource("1_asn1h")
 
+[node name="Hidden" type="MeshInstance2D" parent="."]
+visible = false
+position = Vector2(-31.5, 59.5)
+scale = Vector2(21.5, 81.9)
+mesh = SubResource("QuadMesh_23feo")
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.301346, 0.301346)
 texture = ExtResource("2_23feo")
 hframes = 5
 frame = 4
@@ -85,16 +90,8 @@ libraries = {
 &"": SubResource("AnimationLibrary_64dor")
 }
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-position = Vector2(-4.76837e-07, 0)
-scale = Vector2(6.66797, 6.66797)
-polygon = PackedVector2Array(3, 19, 1, 21, -3, 21, -5, 20, -5, 17, -6, 11, -5, 7, -6, 7, -5, -7, -4, -9, -6, -12, -5, -15, -2, -16, 0, -16, 3, -13, 2, -11, 1, -11, 2, -10, 0, -8, -1, -8, 0, -7, 1, -4, 3, 3, 4, 7, 2, 8, 1, 12, 1, 16, 0, 17, 1, 18)
-
-[node name="Hidden" type="MeshInstance2D" parent="."]
-visible = false
-position = Vector2(0, 29)
-scale = Vector2(1, 0.890625)
-mesh = SubResource("QuadMesh_23feo")
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-63, -351, 9, -349, 42, -317, 57, -273, 34, -245, 17, -242, 31, -225, 5, -187, -21, -185, -11, -162, 5, -156, 6, -130, 17, -106, 81, 135, 74, 159, 42, 172, 32, 275, 32, 337, 32, 373, 4, 382, 51, 403, 62, 433, 30, 453, 4, 472, -103, 459, -114, 435, -106, 405, -106, 373, -123, 341, -123, 170, -142, 135, -125, -28, -119, -88, -102, -161, -90, -192, -81, -199, -97, -218, -101, -240, -118, -250, -131, -261, -115, -308, -79, -336)
 
 [node name="FloorCollider" type="RayCast2D" parent="."]
 position = Vector2(0, 138)
