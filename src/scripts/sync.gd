@@ -25,14 +25,12 @@ func sort_element_overlapping(overlapping):
 		if teleport_destination.global_position.z > element.collider.global_position.z:
 			teleport_destination = overlapping
 
-
 func get_2d_and_3d_element(element):
 	var body = null
 	for item in Global.transforming_items:
 		if element in item:
 			body = item
 	return body
-
 
 func transform_3d_to_2d(element2D, element3D):
 	var overlapping = get_element_overlaping_in_3D(element3D)
@@ -72,7 +70,6 @@ func transform_3d_to_2d(element2D, element3D):
 	element2D.global_position = result
 	return result
 
-
 func transform_2d_to_3d(element2D, element3D) -> Vector3:
 	var hidden: MeshInstance2D = element2D.get_node('Hidden');
 	var object_size = hidden.mesh.get_aabb().size
@@ -99,8 +96,7 @@ func transform_2d_to_3d(element2D, element3D) -> Vector3:
 	var world_z = element3D.global_position.z
 
 	return Vector3(world_x, world_y, world_z)
-	 
-	
+
 func get_visible_world_bounds_of_2d(node: Node2D) -> Vector2:
 	var viewport := node.get_viewport()
 	var canvas_transform := viewport.get_canvas_transform()
@@ -144,7 +140,6 @@ func get_element_overlaping_in_3D(element3D, result = [], second = {}):
 			get_element_overlaping_in_3D(intersection2.collider, result, intersection1.collider)
 	return get_unique_array(result);
 
-
 func get_element_in_the_same_2D_position(element2D, element3D) -> Array:
 	var array = [element2D, element3D]
 	var over_position = get_all_element_in_same_2D_x_position_in_3D();
@@ -153,6 +148,7 @@ func get_element_in_the_same_2D_position(element2D, element3D) -> Array:
 			el.erase(array)
 			return el
 	return []
+
 func get_all_element_in_same_2D_x_position_in_3D():
 	var dic = []
 	var skip = []

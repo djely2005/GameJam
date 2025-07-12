@@ -3,8 +3,8 @@
 [sub_resource type="QuadMesh" id="QuadMesh_fulxt"]
 size = Vector2(20, 5)
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_gvglh"]
-points = PackedVector3Array(5, 2.5, 0, 5, -2.5, 0, -5, 2.5, 0, -5, -2.5, 0)
+[sub_resource type="BoxShape3D" id="BoxShape3D_fulxt"]
+size = Vector3(20, 5, 1)
 
 [node name="PillarWall" type="MeshInstance3D"]
 mesh = SubResource("QuadMesh_fulxt")
@@ -12,4 +12,4 @@ mesh = SubResource("QuadMesh_fulxt")
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-shape = SubResource("ConvexPolygonShape3D_gvglh")
+shape = SubResource("BoxShape3D_fulxt")

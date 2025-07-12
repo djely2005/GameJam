@@ -1,0 +1,59 @@
+[gd_scene load_steps=7 format=3 uid="uid://bd6n4v4m7j4e3"]
+
+[ext_resource type="Script" uid="uid://bxlet2uwlmnd" path="res://src/level_component/door/door.gd" id="1_qirxo"]
+[ext_resource type="PackedScene" uid="uid://bc5iji1uarllr" path="res://assets/level_component/3D/door/NEW-door(NO DOOR FRAME).fbx" id="2_qesvs"]
+
+[sub_resource type="Animation" id="Animation_7cmlb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_p03fx"]
+resource_name = "door_opening"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 1.5708, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gx2rl"]
+_data = {
+&"RESET": SubResource("Animation_7cmlb"),
+&"door_opening": SubResource("Animation_p03fx")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qirxo"]
+size = Vector3(1, 1.5, 0.2)
+
+[node name="Door" type="StaticBody3D"]
+collision_layer = 3
+script = ExtResource("1_qirxo")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_gx2rl")
+}
+
+[node name="NEW-door(NO DOOR FRAME)" parent="." instance=ExtResource("2_qesvs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.35)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.0667477, 0.903312, 0.370254)
+shape = SubResource("BoxShape3D_qirxo")

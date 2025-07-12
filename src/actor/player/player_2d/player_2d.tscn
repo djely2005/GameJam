@@ -96,3 +96,9 @@ polygon = PackedVector2Array(-63, -351, 9, -349, 42, -317, 57, -273, 34, -245, 1
 [node name="FloorCollider" type="RayCast2D" parent="."]
 position = Vector2(0, 138)
 target_position = Vector2(0, 4)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+limit_left = 0
+limit_top = 0
+limit_bottom = 384
+limit_smoothed = true

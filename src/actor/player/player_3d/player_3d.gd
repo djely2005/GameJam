@@ -7,6 +7,7 @@ extends CharacterBody3D
 var snap_vector: Vector3 = Vector3.ZERO
 var input_movement_direction_xz: Vector3 = Vector3.ZERO
 var floor_max_angle_deg: float = 45.0
+var interactable = null;
 
 var _animation_state_machine: AnimationNodeStateMachinePlayback :get = get_animation_state_machine
 
@@ -14,10 +15,20 @@ var _animation_state_machine: AnimationNodeStateMachinePlayback :get = get_anima
 @onready var _state_machine: StateMachine = get_node("StateMachine")
 @onready var _anim_tree: AnimationTree = get_node("AnimationTree")
 
+func _on_area_entered(area):
+	if area.get_parent().has_method("open"):
+		interactable = area.get_parent()
+
+func _on_area_exited(area):
+	if area.get_parent() == interactable:
+		interactable = null
+
 # Godot Engine
 func _ready() -> void:
 	_anim_tree.active = true
 	_animation_state_machine = _anim_tree["parameters/playback"]
+
+	
 
 # Public Method
 
@@ -31,8 +42,4 @@ func _physics_process(delta: float) -> void:
 	_state_machine.physics_update(delta);
 	
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.is_pressed():
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	if Input.is_action_just_pressed("ui_cancel"):  # Escape key by default
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	_state_machine.handle_input(event)

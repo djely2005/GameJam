@@ -6,8 +6,6 @@ extends PlayerState3D
 func physics_update(delta: float) -> void:
 	var movement_direction_xz: Vector3 = _get_input_movement_direction_xz()
 	_apply_xz_movement(delta, movement_direction_xz)
-	#if movement_direction_xz != Vector3.ZERO:
-		#_rotate_body(delta, movement_direction_xz)
 	_update_state()
 	_player.move_and_slide()
 	
@@ -30,7 +28,10 @@ func _update_state() -> void:
 	var target_state_id: String = name
 	if _get_input_movement_direction_xz() == Vector3.ZERO:
 		target_state_id = "Idle"
-	if Input.is_action_just_pressed("interact"):
+	if _get_nearest_physics_object() != null:
+		if Input.is_action_just_pressed("interact") && _get_nearest_physics_object().has_method('open'):
+			target_state_id= "OpeningDoor"
+	if Input.is_action_just_pressed("interact") && !_get_nearest_physics_object().has_method('open'):
 		target_state_id= "Pushing"
 	if target_state_id != name:
 		emit_signal("change_state_request", target_state_id, {})

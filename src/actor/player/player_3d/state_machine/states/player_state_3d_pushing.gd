@@ -7,8 +7,8 @@ var is_attached := false
 func physics_update(delta: float) -> void:
 	if not is_attached:
 		target = _get_nearest_physics_object()
-		_move_towards_target(delta)
-		_face_target_cardinal()
+		is_attached = _move_towards_target(delta, target)
+		_face_target_cardinal(target)
 	else:
 		_move_player_and_push(delta)
 	_update_state()
@@ -39,52 +39,6 @@ func _update_state() -> void:
 		
 		emit_signal("change_state_request", target_state_id, {})
 
-
-func _get_nearest_physics_object() -> Node3D:
-	var min_distance = INF
-	var nearest: Node3D = null
-	for body in _player.get_node("Detection").get_overlapping_bodies():
-		
-		if body is PhysicsBody3D:
-			var distance = _player.global_position.distance_to(body.global_position)
-			if distance < min_distance:
-				min_distance = distance
-				nearest = body
-				
-	return nearest
-
-func _move_towards_target(delta):
-	if not target:
-		return
-
-	var target_pos = target.global_position
-	var direction = (target_pos - _player.global_position)
-	direction.y = 0  # Stay in XZ plane
-	var distance = direction.length()
-	
-	if distance > 0:
-		direction = direction.normalized()
-		_player.velocity = direction * move_speed_xz
-		_player.move_and_slide()
-	else:
-		_player.velocity = Vector3.ZERO
-		_player.global_position.x = target.global_position.x
-		_player.global_position.z = target.global_position.z  # Snap to center
-	is_attached = true
-
-func _face_target_cardinal():
-	if not target:
-		return
-
-	var direction = target.global_position - _player.global_position
-	direction.y = 0
-
-	if direction.length_squared() == 0:
-		return
-	
-	var angle = atan2(direction.x, direction.z)
-	var snapped_angle = round(angle / (PI / 2.0)) * (PI / 2.0)  # Snap to 90-degree angles
-	_player.rotation.y = snapped_angle
 
 func _move_player_and_push(delta):
 	var input_dir = Vector3.ZERO

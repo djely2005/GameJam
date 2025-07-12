@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://sdof2ed4bfss"]
+[gd_scene load_steps=21 format=3 uid="uid://sdof2ed4bfss"]
 
 [ext_resource type="Script" uid="uid://dpae7md3v5kyn" path="res://src/actor/player/player_3d/player_3d.gd" id="1_ftpr1"]
 [ext_resource type="Script" uid="uid://ci0466a2eb8vl" path="res://src/generic/state_machine/state_machine.gd" id="2_bc88m"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://byh8rl8u25ims" path="res://src/actor/player/player_3d/state_machine/states/player_state_3d_pushing.gd" id="5_cmy2o"]
 [ext_resource type="Script" uid="uid://twydo6dn6u6r" path="res://src/actor/player/player_3d/camera_rig.gd" id="5_jog26"]
 [ext_resource type="Script" uid="uid://cjl1f4kxwi8yx" path="res://src/actor/player/player_3d/player_camera_3d.gd" id="6_3k60s"]
+[ext_resource type="Script" uid="uid://cklaais63e05" path="res://src/actor/player/player_3d/state_machine/states/player_state_3D_opening_door.gd" id="6_y0qpd"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0shv6"]
 radius = 0.3
@@ -73,6 +74,9 @@ script = ExtResource("4_n3a1t")
 
 [node name="Pushing" type="Node" parent="StateMachine"]
 script = ExtResource("5_cmy2o")
+
+[node name="OpeningDoor" type="Node" parent="StateMachine"]
+script = ExtResource("6_y0qpd")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource("AnimationNodeStateMachine_bc88m")

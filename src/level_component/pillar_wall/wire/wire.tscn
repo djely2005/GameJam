@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://xwo7nh30wrry"]
+
+[ext_resource type="Script" uid="uid://b7sp6w5tii20o" path="res://src/level_component/pillar_wall/wire/wire.gd" id="1_nto0e"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1grg7"]
+size = Vector3(20, 1, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nto0e"]
+size = Vector3(20, 1, 0.1)
+
+[node name="Wire" type="Area3D"]
+script = ExtResource("1_nto0e")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_1grg7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_nto0e")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

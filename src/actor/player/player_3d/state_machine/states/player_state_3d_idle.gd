@@ -33,8 +33,11 @@ func _update_state() -> void:
 	var target_state_id: String = name
 	if _get_input_movement_direction_xz() != Vector3.ZERO:
 		target_state_id = "Walking"
-	if Input.is_action_just_pressed("interact"):
-		target_state_id= "Pushing"
+	if _get_nearest_physics_object() != null:
+		if Input.is_action_just_pressed("interact") && _get_nearest_physics_object().has_method('open'):
+			target_state_id= "OpeningDoor"
+		if Input.is_action_just_pressed("interact")  && !_get_nearest_physics_object().has_method('open'):
+			target_state_id= "Pushing"
 	
 	if target_state_id != name:
 		emit_signal("change_state_request", target_state_id, {})
